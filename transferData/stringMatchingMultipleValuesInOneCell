@@ -1,0 +1,44 @@
+Sub SearchAndCopyValues()
+    Dim wsSource As Worksheet
+    Dim wsDest1 As Worksheet
+    Dim wsDest2 As Worksheet
+    Dim wsDest3 As Worksheet
+    Dim cell As Range
+    Dim parts() As String
+    Dim part As Variant
+    Dim rowOffset As Long, colOffset As Long
+
+    ' Set the source and destination worksheets
+    Set wsSource = ThisWorkbook.Sheets("SheetTest1")
+    Set wsDest1 = ThisWorkbook.Sheets("Lab1")
+    Set wsDest2 = ThisWorkbook.Sheets("Lab2")
+    Set wsDest3 = ThisWorkbook.Sheets("Lab3")
+
+    ' Clear any existing data in the destination sheets
+    wsDest1.Cells.Clear
+    wsDest2.Cells.Clear
+    wsDest3.Cells.Clear
+
+    ' Loop through each cell in the source worksheet
+    For Each cell In wsSource.UsedRange
+        ' Split the cell value into parts based on space
+        parts = Split(cell.Value, " ")
+        
+        ' Loop through each part to check for (L-1), (L-2), and (L-3)
+        For Each part In parts
+            If InStr(part, "(L-1)") > 0 Then
+                ' Copy the value to the corresponding position in Lab1
+                wsDest1.Cells(cell.Row, cell.Column).Value = cell.Value
+            ElseIf InStr(part, "(L-2)") > 0 Then
+                ' Copy the value to the corresponding position in Lab2
+                wsDest2.Cells(cell.Row, cell.Column).Value = cell.Value
+            ElseIf InStr(part, "(L-3)") > 0 Then
+                ' Copy the value to the corresponding position in Lab3
+                wsDest3.Cells(cell.Row, cell.Column).Value = cell.Value
+            End If
+        Next part
+    Next cell
+
+    MsgBox "Values containing '(L-1)', '(L-2)', or '(L-3)' have been copied to the respective sheets."
+End Sub
+

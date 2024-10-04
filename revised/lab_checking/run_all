@@ -1,0 +1,8 @@
+Sub RunAllModules()
+    ' Call the subroutines from different modules
+   Call Module4.UnmergeAndRetainValuesInFixedRange
+   Call Module3.StringMatchingLec
+   Call Module1.StringMatchingLab
+   Call Module5.MergeSameValueCellsInFixedRange
+End Sub
+

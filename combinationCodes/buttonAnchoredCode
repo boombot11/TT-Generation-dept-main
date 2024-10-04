@@ -1,0 +1,8 @@
+' Put Module names and Sub names in the order to run the files
+Sub RunAllModules()
+    ' Call the subroutines from different modules
+    Call Module5.UnmergeAndRetainValuesInFixedRange
+    Call Module4.SearchAndCopyValues
+    Call Module1.CopyCellsWithT
+End Sub
+

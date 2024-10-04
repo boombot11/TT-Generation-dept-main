@@ -1,0 +1,38 @@
+Sub UnmergeAndRetainValuesInFixedRange()
+    Dim cell As Range
+    Dim ws As Worksheet
+    Dim mergeArea As Range
+    Dim mergeValue As Variant
+    Dim rangeArray As Variant
+    Dim i As Integer
+    Dim fixedRange As Range
+
+    ' Set the active worksheet
+    Set ws = ActiveSheet
+
+    ' Initialize the array of strings for ranges
+    rangeArray = Array("B1:B11", "C1:C11", "D1:D11", "E1:E11")
+
+    ' Loop through the indexes of the array
+    For i = LBound(rangeArray) To UBound(rangeArray)
+        ' Set the fixedRange based on the current index of rangeArray
+        Set fixedRange = ws.Range(rangeArray(i))
+
+        ' Loop through each cell in the fixed range
+        For Each cell In fixedRange
+            ' Check if the cell is the top-left cell of a merged area
+            If cell.MergeCells And cell.Address = cell.mergeArea.Cells(1, 1).Address Then
+                ' Store the value of the merged cell
+                mergeValue = cell.Value
+                ' Unmerge the cells
+                Set mergeArea = cell.mergeArea
+                mergeArea.UnMerge
+                ' Set the value of all unmerged cells to the stored value
+                mergeArea.Value = mergeValue
+            End If
+        Next cell
+    Next i
+
+    MsgBox "Cells in the specified ranges have been unmerged and values retained."
+End Sub
+

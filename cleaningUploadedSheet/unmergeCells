@@ -1,0 +1,18 @@
+Sub UnmergeVerticalCells()
+    Dim cell As Range
+    Dim ws As Worksheet
+    
+    ' Set the active worksheet
+    Set ws = ActiveSheet
+    
+    ' Loop through each cell in the used range
+    For Each cell In ws.UsedRange
+        ' Check if the cell is merged and if it spans multiple rows
+        If cell.MergeCells And cell.mergeArea.Rows.Count > 1 Then
+            cell.mergeArea.UnMerge
+        End If
+    Next cell
+    
+    MsgBox "All vertically merged cells have been unmerged."
+End Sub
+

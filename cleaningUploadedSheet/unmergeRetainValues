@@ -1,0 +1,26 @@
+Sub UnmergeAndRetainValues()
+    Dim cell As Range
+    Dim ws As Worksheet
+    Dim mergeArea As Range
+    Dim mergeValue As Variant
+    
+    ' Set the active worksheet
+    Set ws = ActiveSheet
+    
+    ' Loop through each cell in the used range in reverse order
+    For Each cell In ws.UsedRange
+        ' Check if the cell is the top-left cell of a merged area
+        If cell.MergeCells And cell.Address = cell.mergeArea.Cells(1, 1).Address Then
+            ' Store the value of the merged cell
+            mergeValue = cell.Value
+            ' Unmerge the cells
+            Set mergeArea = cell.mergeArea
+            mergeArea.UnMerge
+            ' Set the value of all unmerged cells to the stored value
+            mergeArea.Value = mergeValue
+        End If
+    Next cell
+    
+    MsgBox "All vertically merged cells have been unmerged and values retained."
+End Sub
+

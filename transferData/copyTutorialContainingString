@@ -1,0 +1,34 @@
+Sub CopyCellsWithT()
+    Dim wsSource As Worksheet
+    Dim wsDestination As Worksheet
+    Dim cell As Range
+    Dim lastRow As Long
+    Dim lastCol As Long
+    Dim copied As Boolean
+
+    ' Set worksheets
+    Set wsSource = ThisWorkbook.Sheets("TestSheet")
+    Set wsDestination = ThisWorkbook.Sheets("TutorialSheet")
+
+    ' Find the last row and column in TestSheet
+    lastRow = wsSource.Cells(wsSource.Rows.Count, 1).End(xlUp).Row
+    lastCol = wsSource.Cells(1, wsSource.Columns.Count).End(xlToLeft).Column
+
+    copied = False
+
+    ' Loop through each cell in TestSheet
+    For Each cell In wsSource.Range(wsSource.Cells(1, 1), wsSource.Cells(lastRow, lastCol))
+        If InStr(1, cell.Value, "(T)", vbTextCompare) > 0 Then
+            ' Copy cell to TutorialSheet at the same position
+            wsDestination.Cells(cell.Row, cell.Column).Value = cell.Value
+            copied = True
+        End If
+    Next cell
+
+    If copied Then
+        MsgBox "Data copied successfully!"
+    Else
+        MsgBox "No cells containing '(T)' found."
+    End If
+End Sub
+

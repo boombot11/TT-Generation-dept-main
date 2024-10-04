@@ -1,0 +1,36 @@
+Sub CopyDataWithMergedCells()
+    Dim wsSource As Worksheet
+    Dim wsDest As Worksheet
+    Dim cell As Range
+    Dim mergeArea As Range
+    
+    ' Set the source and destination worksheets
+    Set wsSource = ThisWorkbook.Sheets("Sheet1")
+    Set wsDest = ThisWorkbook.Sheets("Sheet2")
+    
+    ' Clear existing data in the destination sheet
+    wsDest.Cells.Clear
+    
+    ' Loop through each cell in the source worksheet
+    For Each cell In wsSource.UsedRange
+        ' Check if the cell is the top-left cell of a merged area
+        If cell.MergeCells And cell.Address = cell.mergeArea.Cells(1, 1).Address Then
+            ' Get the value of the merged cell
+            Dim mergeValue As Variant
+            mergeValue = cell.Value
+            
+            ' Write the value to the same cell location in the destination sheet
+            wsDest.Range(cell.Address).Merge
+            wsDest.Range(cell.Address).Value = mergeValue
+            ' Optional: Center the merged cell's value
+            wsDest.Range(cell.Address).HorizontalAlignment = xlCenter
+            wsDest.Range(cell.Address).VerticalAlignment = xlCenter
+        ElseIf Not cell.MergeCells Then
+            ' Copy the value of individual cells that are not merged
+            wsDest.Range(cell.Address).Value = cell.Value
+        End If
+    Next cell
+
+    MsgBox "Data has been copied from Sheet1 to Sheet2."
+End Sub
+

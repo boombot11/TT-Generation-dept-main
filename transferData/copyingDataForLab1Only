@@ -1,0 +1,30 @@
+// Code for only String checking for '(L-1)'
+//First sheet should be named SheetTest
+//Second sheet should be named LabSheet
+
+
+
+Sub StringMatchingLab()
+    Dim wsSource As Worksheet
+    Dim wsDest As Worksheet
+    Dim cell As Range
+
+    ' Set the source and destination worksheets
+    Set wsSource = ThisWorkbook.Sheets("SheetTest")
+    Set wsDest = ThisWorkbook.Sheets("LabSheet")
+
+    ' Clear any existing data in the destination sheet
+    wsDest.Cells.Clear
+
+    ' Loop through each cell in the source worksheet
+    For Each cell In wsSource.UsedRange
+        ' Check if the cell contains the string "(L-1)"
+        If InStr(cell.Value, "(L-1)") > 0 Then
+            ' Copy the value to the same column and row in the destination sheet
+            wsDest.Cells(cell.Row, cell.Column).Value = cell.Value
+        End If
+    Next cell
+
+    MsgBox "Values containing '(L-1)' have been copied to 'LabSheet' in the same positions."
+End Sub
+

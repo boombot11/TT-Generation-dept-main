@@ -1,0 +1,31 @@
+Sub CopyBasedOnNumbers()
+    Dim wsSource As Worksheet
+    Dim wsDest66 As Worksheet
+    Dim wsDest65 As Worksheet
+    Dim wsDest64 As Worksheet
+    Dim cell As Range
+
+    ' Set the source and destination worksheets
+    Set wsSource = ThisWorkbook.Sheets("LecSheet1")
+    Set wsDest66 = ThisWorkbook.Sheets("66")
+    Set wsDest65 = ThisWorkbook.Sheets("65")
+    Set wsDest64 = ThisWorkbook.Sheets("64")
+
+    ' Loop through each cell in the source worksheet
+    For Each cell In wsSource.UsedRange
+        ' Check for the presence of "(66)", "(65)", or "(64)"
+        If InStr(cell.Value, "(66)") > 0 Then
+            ' Copy the value to the corresponding position in sheet 66
+            wsDest66.Cells(cell.Row, cell.Column).Value = cell.Value
+        ElseIf InStr(cell.Value, "(65)") > 0 Then
+            ' Copy the value to the corresponding position in sheet 65
+            wsDest65.Cells(cell.Row, cell.Column).Value = cell.Value
+        ElseIf InStr(cell.Value, "(64)") > 0 Then
+            ' Copy the value to the corresponding position in sheet 64
+            wsDest64.Cells(cell.Row, cell.Column).Value = cell.Value
+        End If
+    Next cell
+
+    MsgBox "Values containing '(66)', '(65)', or '(64)' have been copied to the respective sheets."
+End Sub
+

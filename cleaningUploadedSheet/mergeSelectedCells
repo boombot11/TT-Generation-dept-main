@@ -1,0 +1,58 @@
+Sub MergeSameValueCellsInSelectedRangeOnly()
+    Dim cell As Range
+    Dim selectedRange As Range
+    Dim mergeRange As Range
+    Dim firstCellValue As Variant
+
+    ' Get the selected range of cells
+    Set selectedRange = Application.Selection
+
+    ' Loop through each cell in the selected range
+    For Each cell In selectedRange
+        ' Check if the cell is not empty
+        If cell.Value <> "" Then
+            ' If mergeRange is Nothing, initialize it
+            If mergeRange Is Nothing Then
+                Set mergeRange = cell
+                firstCellValue = cell.Value
+            ElseIf cell.Value = firstCellValue Then
+                ' Expand mergeRange if the value matches
+                Set mergeRange = Union(mergeRange, cell)
+            Else
+                ' If the values don't match, merge the previous range
+                If Not mergeRange Is Nothing Then
+                    mergeRange.Merge
+                    mergeRange.Value = firstCellValue
+                    ' Center the merged cell's value
+                    mergeRange.HorizontalAlignment = xlCenter
+                    mergeRange.VerticalAlignment = xlCenter
+                End If
+                ' Start a new merge range
+                Set mergeRange = cell
+                firstCellValue = cell.Value
+            End If
+        Else
+            ' If we hit an empty cell, finalize the merge for the current range
+            If Not mergeRange Is Nothing Then
+                mergeRange.Merge
+                mergeRange.Value = firstCellValue
+                ' Center the merged cell's value
+                mergeRange.HorizontalAlignment = xlCenter
+                mergeRange.VerticalAlignment = xlCenter
+                Set mergeRange = Nothing
+            End If
+        End If
+    Next cell
+
+    ' Final merge check for any remaining range
+    If Not mergeRange Is Nothing Then
+        mergeRange.Merge
+        mergeRange.Value = firstCellValue
+        ' Center the merged cell's value
+        mergeRange.HorizontalAlignment = xlCenter
+        mergeRange.VerticalAlignment = xlCenter
+    End If
+
+    MsgBox "Cells with the same value in the selected range have been merged."
+End Sub
+

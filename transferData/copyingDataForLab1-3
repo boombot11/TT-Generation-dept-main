@@ -1,0 +1,40 @@
+// For string matching and copying matched data for strings '(L-1)' '(L-2)' '(L-3)' only
+// First sheet to be named SheetTest
+// 3 other sheets named Lab1 Lab2 Lab3
+
+Sub SearchAndCopyValues()
+    Dim wsSource As Worksheet
+    Dim wsDest1 As Worksheet
+    Dim wsDest2 As Worksheet
+    Dim wsDest3 As Worksheet
+    Dim cell As Range
+
+    ' Set the source and destination worksheets
+    Set wsSource = ThisWorkbook.Sheets("SheetTest")
+    Set wsDest1 = ThisWorkbook.Sheets("Lab1")
+    Set wsDest2 = ThisWorkbook.Sheets("Lab2")
+    Set wsDest3 = ThisWorkbook.Sheets("Lab3")
+
+    ' Clear any existing data in the destination sheets
+    ' wsDest1.Cells.Clear
+    ' wsDest2.Cells.Clear
+    ' wsDest3.Cells.Clear
+
+    ' Loop through each cell in the source worksheet
+    For Each cell In wsSource.UsedRange
+        ' Check for the presence of "(L-1)", "(L-2)", and "(L-3)"
+        If InStr(cell.Value, "(L-1)") > 0 Then
+            ' Copy the value to the corresponding position in Lab1
+            wsDest1.Cells(cell.Row, cell.Column).Value = cell.Value
+        ElseIf InStr(cell.Value, "(L-2)") > 0 Then
+            ' Copy the value to the corresponding position in Lab2
+            wsDest2.Cells(cell.Row, cell.Column).Value = cell.Value
+        ElseIf InStr(cell.Value, "(L-3)") > 0 Then
+            ' Copy the value to the corresponding position in Lab3
+            wsDest3.Cells(cell.Row, cell.Column).Value = cell.Value
+        End If
+    Next cell
+
+    MsgBox "Values containing '(L-1)', '(L-2)', or '(L-3)' have been copied to the respective sheets."
+End Sub
+

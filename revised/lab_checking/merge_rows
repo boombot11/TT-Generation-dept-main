@@ -1,0 +1,83 @@
+Sub MergeSameValueCellsInFixedRange()
+    Dim cell As Range
+    Dim mergeRange As Range
+    Dim firstCellValue As Variant
+    Dim fixedRange As Range
+    Dim rangeArray As Variant
+    Dim sheetNames As Variant
+    Dim i As Integer
+    Dim j As Integer
+
+    ' Initialize the array of strings for the ranges to check
+    rangeArray = Array("B1:B11", "C1:C11", "D1:D11", "E1:E11")
+    
+    ' Initialize the array of sheet names
+    sheetNames = Array("main", "L1", "L2", "L3", "64", "63", "66")
+
+    ' Turn off alerts to prevent pop-ups during merging
+    Application.DisplayAlerts = False
+
+    ' Loop through each sheet
+    For j = LBound(sheetNames) To UBound(sheetNames)
+        ' Set the current sheet
+        With ThisWorkbook.Sheets(sheetNames(j))
+            ' Loop through the indexes of the rangeArray
+            For i = LBound(rangeArray) To UBound(rangeArray)
+                ' Set the fixedRange based on the current index of rangeArray
+                Set fixedRange = .Range(rangeArray(i))
+
+                ' Loop through each cell in the fixed range
+                For Each cell In fixedRange
+                    ' Check if the cell is not empty
+                    If cell.Value <> "" Then
+                        ' If mergeRange is Nothing, initialize it
+                        If mergeRange Is Nothing Then
+                            Set mergeRange = cell
+                            firstCellValue = cell.Value
+                        ElseIf cell.Value = firstCellValue Then
+                            ' Expand mergeRange if the value matches
+                            Set mergeRange = Union(mergeRange, cell)
+                        Else
+                            ' If the values don't match, merge the previous range
+                            If Not mergeRange Is Nothing Then
+                                mergeRange.Merge
+                                mergeRange.Value = firstCellValue
+                                ' Center the merged cell's value
+                                mergeRange.HorizontalAlignment = xlCenter
+                                mergeRange.VerticalAlignment = xlCenter
+                            End If
+                            ' Start a new merge range
+                            Set mergeRange = cell
+                            firstCellValue = cell.Value
+                        End If
+                    Else
+                        ' If we hit an empty cell, finalize the merge for the current range
+                        If Not mergeRange Is Nothing Then
+                            mergeRange.Merge
+                            mergeRange.Value = firstCellValue
+                            ' Center the merged cell's value
+                            mergeRange.HorizontalAlignment = xlCenter
+                            mergeRange.VerticalAlignment = xlCenter
+                            Set mergeRange = Nothing
+                        End If
+                    End If
+                Next cell
+
+                ' Final merge check for any remaining range
+                If Not mergeRange Is Nothing Then
+                    mergeRange.Merge
+                    mergeRange.Value = firstCellValue
+                    ' Center the merged cell's value
+                    mergeRange.HorizontalAlignment = xlCenter
+                    mergeRange.VerticalAlignment = xlCenter
+                End If
+            Next i
+        End With
+    Next j
+
+    ' Turn alerts back on
+    Application.DisplayAlerts = True
+
+    MsgBox "Cells with the same value in the specified ranges have been merged across all specified sheets."
+End Sub
+

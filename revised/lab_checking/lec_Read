@@ -1,0 +1,74 @@
+Sub StringMatchingLec()
+    Dim wsSource As Worksheet
+    Dim wsDestL1 As Worksheet
+    Dim wsDestL2 As Worksheet
+    Dim wsDestL3 As Worksheet
+    Dim cell As Range
+    Dim subjects As Variant
+    Dim subject As Variant
+    Dim timeValue As String
+    Dim destRow As Variant
+    Dim col As Long
+    Dim destCol As Long
+
+    ' Set the source worksheet and destination worksheets for each lab
+    Set wsSource = ThisWorkbook.Sheets("main")
+    Set wsDestL1 = ThisWorkbook.Sheets("63")
+    Set wsDestL2 = ThisWorkbook.Sheets("64")
+    Set wsDestL3 = ThisWorkbook.Sheets("66")
+
+    ' Clear any existing data in the subject columns (B onwards)
+    wsDestL1.Cells.Clear
+    wsDestL2.Cells.Clear
+    wsDestL3.Cells.Clear
+
+    ' Copy time values to destination sheets
+    wsDestL1.Range("A1:A" & wsSource.Cells(wsSource.Rows.Count, 1).End(xlUp).Row).Value = wsSource.Range("A1:A" & wsSource.Cells(wsSource.Rows.Count, 1).End(xlUp).Row).Value
+    wsDestL2.Range("A1:A" & wsSource.Cells(wsSource.Rows.Count, 1).End(xlUp).Row).Value = wsSource.Range("A1:A" & wsSource.Cells(wsSource.Rows.Count, 1).End(xlUp).Row).Value
+    wsDestL3.Range("A1:A" & wsSource.Cells(wsSource.Rows.Count, 1).End(xlUp).Row).Value = wsSource.Range("A1:A" & wsSource.Cells(wsSource.Rows.Count, 1).End(xlUp).Row).Value
+
+    ' Loop through each row in the source worksheet
+    For Each cell In wsSource.UsedRange.Rows
+        ' Get the time value (the first cell in the row)
+        timeValue = wsSource.Cells(cell.Row, 1).Value
+        
+        ' Loop through columns B to H (2 to 8)
+        For col = 2 To 8 ' Columns B to H
+            ' Check if the cell in the current column is not empty
+            If wsSource.Cells(cell.Row, col).Value <> "" Then
+                ' Split the cell content into subjects (if multiple)
+                subjects = Split(wsSource.Cells(cell.Row, col).Value, " ") ' Assumes multiple subjects are separated by spaces
+
+                ' Check each subject for the lab codes
+                For Each subject In subjects
+                    ' Find the corresponding destination column
+                    destCol = col ' Same column index in destination sheet
+
+                    If InStr(subject, "(63)") > 0 Then
+                        ' Find the row in LabSheet_L1 matching the time
+                        destRow = Application.Match(timeValue, wsDestL1.Columns(1), 0)
+                        If Not IsError(destRow) Then
+                            wsDestL1.Cells(destRow, destCol).Value = subject ' Set subject in the same column
+                        End If
+                    ElseIf InStr(subject, "(64)") > 0 Then
+                        ' Find the row in LabSheet_L2 matching the time
+                        destRow = Application.Match(timeValue, wsDestL2.Columns(1), 0)
+                        If Not IsError(destRow) Then
+                            wsDestL2.Cells(destRow, destCol).Value = subject ' Set subject in the same column
+                        End If
+                    ElseIf InStr(subject, "(66)") > 0 Then
+                        ' Find the row in LabSheet_L3 matching the time
+                        destRow = Application.Match(timeValue, wsDestL3.Columns(1), 0)
+                        If Not IsError(destRow) Then
+                            wsDestL3.Cells(destRow, destCol).Value = subject ' Set subject in the same column
+                        End If
+                    End If
+                Next subject
+            End If
+        Next col
+    Next cell
+
+    MsgBox "Subjects have been added to their respective lab sheets based on time."
+End Sub
+
+
