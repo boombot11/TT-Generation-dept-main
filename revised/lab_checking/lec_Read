@@ -17,10 +17,6 @@ Sub StringMatchingLec()
     Set wsDestL2 = ThisWorkbook.Sheets("64")
     Set wsDestL3 = ThisWorkbook.Sheets("66")
 
-    ' Clear any existing data in the subject columns (B onwards)
-    wsDestL1.Cells.Clear
-    wsDestL2.Cells.Clear
-    wsDestL3.Cells.Clear
 
     ' Copy time values to destination sheets
     wsDestL1.Range("A1:A" & wsSource.Cells(wsSource.Rows.Count, 1).End(xlUp).Row).Value = wsSource.Range("A1:A" & wsSource.Cells(wsSource.Rows.Count, 1).End(xlUp).Row).Value
